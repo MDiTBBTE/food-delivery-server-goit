@@ -18,5 +18,4 @@ const startServer = port => {
 
   server.listen(port);
 };
-
 module.exports = startServer;
