@@ -1,4 +1,7 @@
 const fs = require("fs");
+const path = require("path");
+
+const fileUrl = path.join("src/db", "/users.json");
 
 const options = {
   username: "Ivan",
@@ -15,7 +18,7 @@ function rendomSuccess(min, max) {
 }
 
 const signUpRoute = (request, response) => {
-  fs.readFile("src/db/users.json", "utf8", (err, jsonString) => {
+  fs.readFile(fileUrl, "utf8", (err, jsonString) => {
     if (err) {
       console.log("File read failed:", err);
       return;
@@ -42,7 +45,7 @@ const signUpRoute = (request, response) => {
       response.end();
     }
 
-    fs.writeFileSync("src/db/users.json", JSON.stringify(data));
+    fs.writeFileSync(fileUrl, JSON.stringify(data));
   });
 };
 

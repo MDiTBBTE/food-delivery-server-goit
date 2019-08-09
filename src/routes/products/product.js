@@ -1,7 +1,10 @@
 const fs = require("fs");
+const path = require("path");
+
+const fileUrl = path.join("src/db", "all-products.json");
 
 const productsRoute = (request, response) => {
-  fs.readFile("src/db/all-products.json", "utf8", (err, data) => {
+  fs.readFile(fileUrl, "utf8", (err, data) => {
     response.writeHead(200, { "Content-Type": "application/json" });
     response.write(data);
     response.end();
