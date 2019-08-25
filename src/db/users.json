@@ -7,5 +7,15 @@
       "password": "12345",
       "email": "adblock@gmail.com"
     }
+  },
+  {
+    "status": "success",
+    "user": {
+      "username": "Loha",
+      "telephone": "050 382 31 12",
+      "password": "12345",
+      "email": "adblock@gmail.com",
+      "url": "D:\\GoIT\\node\\node-js-course\\lesson-1\\demo\\src\\routes\\signup"
+    }
   }
 ]
