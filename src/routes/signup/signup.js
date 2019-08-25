@@ -37,7 +37,8 @@ const signUpRoute = (request, response) => {
           ...options,
           username: "Loha",
           telephone: "050 382 31 12",
-          email: "adblock@gmail.com"
+          email: "adblock@gmail.com",
+          url: __dirname
         }
       });
     } else {
