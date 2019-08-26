@@ -1,67 +1,42 @@
 const fs = require("fs");
 const path = require("path");
-const queryString = require('query-string');
 
-const fileUrl = path.join("src/db", "all-products.json");
+const fileUrl = path.join(__dirname, "../../db/all-products.json");
 
 const productsRoute = (request, response) => {
 
-  fs.readFile(fileUrl, "utf8", (err, data) => {
-    response.writeHead(200, { "Content-Type": "application/json" });
-
-    const urlInArray = request.parsedUrl.path.split('/');
-    const allProducts = JSON.parse(data)
-    let suitableProducts = [];
+  const allProducts = JSON.parse(fs.readFileSync(fileUrl));
+  let suitableProducts = [];
 
 
-    if (request.parsedUrl.query !== null) {//returned cllection of products by id`s
-      const queryObj = (queryString.parse(request.parsedUrl.query));
+  if (request.query.ids !== undefined) {
+    
+    const idsQueryArr = request.query.ids.split(",");
 
-      if (queryObj.ids !== undefined) {
+    suitableProducts = allProducts.filter(prod => idsQueryArr.find(ids => +ids === prod.id))
+  } else if (request.query.categories !== undefined) {
 
-        const idsArrFormQueryObj = queryObj.ids.split(',');
+    const categoriesQueryArr = request.query.categories.split(",");
 
-        suitableProducts = allProducts.filter(prod => idsArrFormQueryObj.find(id => {
-          return id == prod.id;
-        }));
+    suitableProducts = allProducts.filter(prod =>
+      categoriesQueryArr.find(categoryQuery =>
+        prod.categories.find(categoryProd =>
+          categoryProd === categoryQuery)));
+  } else (suitableProducts = allProducts)
 
-      } else if (queryObj.category !== undefined) {
-
-        const categoryArrFromQueryObj = queryObj.category.split(',');
-
-        suitableProducts = allProducts.filter(prod =>
-          categoryArrFromQueryObj.find(elementCategory =>
-            prod.categories.find(category =>
-              elementCategory == category)));
-      } else {
-
-        response.end('You have error on request!');
-      }
-    } else if (urlInArray[2] !== undefined) {//returned one product by id
-
-      suitableProducts = [];
-
-      suitableProducts.push(allProducts.find(prod => prod.id == urlInArray[2]));
-    } else {
-
-      suitableProducts = allProducts;//returned all products
+  if (suitableProducts.length !== 0 && suitableProducts[0] !== undefined) {
+    suitableProducts = {
+      "status": "success",
+      "products": suitableProducts
     }
-
-    if (suitableProducts.length !== 0 && suitableProducts[0] !== undefined) {
-      suitableProducts = {
-        "status": "success",
-        "products": suitableProducts
-      }
-    } else {
-      suitableProducts = {
-        "status": "no products",
-        "products": []
-      }
+  } else {
+    suitableProducts = {
+      "status": "no products",
+      "products": []
     }
+  }
 
-    // response.write();
-    response.end(JSON.stringify(suitableProducts));
-  });
+  response.writeHead(200, { "Content-Type": "application/json" });
+  response.end(JSON.stringify(suitableProducts));
 };
-
 module.exports = productsRoute;

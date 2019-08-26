@@ -1,35 +1,30 @@
-const http = require("http");
-const url = require("url");
+const express = require('express');
+const path = require('path');
+const bodyParser = require('body-parser');
+const app = require('./modules/app');
+const morgan = require('morgan');
+const router = require('./routes/router');
 
-const morgan = require("morgan");
-const router = require("./routes/router");
+const errorHandler = (err, req, res, next) => {
+  res
+    .status(500)
+    .send('Error found: ' + err.stack);
+};
 
-const logger = morgan("combined");
+const staticPath = path.join(__dirname, '..', 'assets');
 
 const startServer = port => {
-  const server = http.createServer((request, response) => {
-    // Get route from the request
-    const parsedUrl = url.parse(request.url);
+  app
+    .use(bodyParser.urlencoded({ extended: false }))
+    .use(bodyParser.json())
+    .use(morgan('dev'))
+    .use(express.static(staticPath))
+    .use('/', router)
+    .use(errorHandler);
 
-    if (parsedUrl.href.includes('products')) {
+  app.listen(port);
 
-      request.parsedUrl = parsedUrl;
-      // Get the id which was assigned by click
-      parsedUrl.pathname = '/products';
-
-    } else {
-      parsedUrl.pathname = url.parse(request.url).pathname;
-    }
-
-    // Get router function
-    const func = router[parsedUrl.pathname] || router.default;
-    logger(request, response, () => func(request, response));
-
-
-
-  });
-
-  server.listen(port);
+  console.log('Server was started at http://localhost:' + port);
 };
 
 module.exports = startServer;
