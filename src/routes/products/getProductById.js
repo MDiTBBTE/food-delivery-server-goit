@@ -1,11 +1,10 @@
-const User = require("../../modules/db/schemas/user");
+const Product = require("../../modules/db/schemas/product");
 
-
-const userById = (request, response) => {
+const productById = (request, response) => {
 
     const id = request.params.id;
 
-    User.findById(id)
+    Product.findById(id)
         .exec()
         .then(doc => {
             response.status(200).json(doc);
@@ -17,4 +16,4 @@ const userById = (request, response) => {
         })
 
 }
-module.exports = userById;
+module.exports = productById;

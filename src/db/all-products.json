@@ -9,6 +9,7 @@
     "creatorId": 1,
     "created": "21-08-2018",
     "modified": "21-08-2018",
+    "likes": 1,
     "categories": [
       "pizza"
     ]
@@ -23,24 +24,12 @@
     "creatorId": 1,
     "created": "21-08-2018",
     "modified": "21-08-2018",
+    "likes": 2,
     "categories": [
       "pizza"
     ]
   },
-  {
-    "id": 19151832,
-    "sku": 1120002,
-    "name": "Пицца Американо",
-    "description": "Пожалуй, самая популярная в мире, даже меню любой пиццерии начинается, как правило, именно с неё. Состав этой пиццы необычайно прост, её основные ингредиенты: сыр моцарелла, спелые помидоры и листья свежего базилика, которые придают ей неповторимый вкус и аромат.",
-    "price": "55",
-    "currency": "UAN",
-    "creatorId": 1,
-    "created": "21-08-2018",
-    "modified": "21-08-2018",
-    "categories": [
-      "pizza"
-    ]
-  },
+  
   {
     "id": 191115832,
     "sku": 1120002,
@@ -51,6 +40,7 @@
     "creatorId": 1,
     "created": "21-08-2018",
     "modified": "21-08-2018",
+    "likes": 1,
     "categories": [
       "pizza"
     ]
@@ -65,6 +55,7 @@
     "creatorId": 1,
     "created": "21-08-2018",
     "modified": "21-08-2018",
+    "likes": 5,
     "categories": [
       "pizza"
     ]
@@ -79,6 +70,7 @@
     "creatorId": 1,
     "created": "21-08-2018",
     "modified": "21-08-2018",
+    "likes": 3,
     "categories": [
       "pizza"
     ]

@@ -1,43 +1,47 @@
-const fs = require("fs");
-const path = require("path");
-const express = require('express')
-const bodyParser = require('body-parser');
+const User = require('../../modules/db/schemas/user');
+const bcrypt = require('bcrypt');
 
-const app = express()
+const createUser = (req, response) => {
 
-app.use(bodyParser.json()) // for parsing application/json
-app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+    // Example for creating
+    // const user = {
+    // "favoriteProducts": [],
+    // "viewedProducts": [],
+    // "orders": [],
+    // "_id": "5d67cdf87e979137dcd7497f",
+    // "username": "Andrii",
+    // "email": "example.me@gmail.com",
+    // "telephone": "050 484 75 79",
+    // "password": "$2b$10$sEXnv13Kvr3xXIhEAEmcwuZT2QCQqUZdzO2ssh1ImPwOkh0Qjm6Cm",
+    // }
+    
+    const user = req.body;
 
-const fileUrl = path.join(__dirname, "../../db/users.json");
+    const hashedPassword = bcrypt.hashSync(user.password, 10);
+    const userData = { ...user, password: hashedPassword };
 
-const createUser = (req, res) => {
+    const newUser = new User(userData);
 
-    fs.readFile(fileUrl, "utf8", (err, data) => {
+    const sendResponse = (user) => {
+        console.log(user);
 
-        let user = {
-            "id": Date.now(),
-            "username": req.body.name,
-            "telephone": "063 467 71 31",
-            "password": "12345",
-            "email": "ivan@gmail.com"
-        }
-
-        let allUsers = JSON.parse(data);
-        allUsers.push(user);
-
-        fs.writeFileSync(fileUrl, JSON.stringify(allUsers), 'utf8');
-
-        res.writeHead(201, {
-            'Content-Type': 'application/json'
+        response.json({
+            status: 'success',
+            user
         });
+    };
 
-        const result = {
-            "status": "success",
-            "user": user
-        }
+    const sendError = () => {
+        response.status(400);
+        response.json({
+            error: 'user was not saved'
+        });
+    };
 
-        res.end(JSON.stringify(result));
-    });
+    newUser.save()
+        .then(sendResponse)
+        .catch(sendError)
+
 };
 
 module.exports = createUser;
